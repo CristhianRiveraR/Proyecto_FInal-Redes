@@ -230,15 +230,15 @@ max-ephone 10
 ip source-address 10.10.10.1 port 2000
 
 ephone-dn 1
-number 11001
+number 56001
 exit
 
 ephone-dn 2
-number 11002
+number 56002
 exit
 
 ephone-dn 3
-number 11003
+number 56003
 exit
 
 ephone 1
