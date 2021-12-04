@@ -266,23 +266,19 @@ ip route 0.0.0.0 0.0.0.0 10.12.0.2
 
 
 
----NAT_ALIBABA
+---NAT_TESLA
 
 en
 conf t
-hostname NAT_ALIBABA
+hostname NAT_TESLA
 
 int g0/2
-ip add 101.0.0.6 255.255.255.252
+ip add 50.0.0.6 255.255.255.252
 no shut
 
 int g0/0
-ip add 172.16.0.2 255.255.255.252
+ip add 10.12.0.2 255.255.255.252
 no shut
-
-
-
-
 
 --S1_TESLA
 
