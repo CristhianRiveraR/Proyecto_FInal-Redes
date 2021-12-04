@@ -280,6 +280,61 @@ int g0/0
 ip add 10.12.0.2 255.255.255.252
 no shut
 
+
+
+//BGP
+
+
+
+//Tuneles
+
+int tunnel 0
+ip add 172.16.0.1 255.255.255.252
+tunnel source g0/2
+tunnel destination 101.0.0.46
+tunnel mode gre ip
+
+int tunnel 1
+ip add 172.16.1.1 255.255.255.252
+tunnel source g0/2
+tunnel destination 101.0.0.42
+tunnel mode gre ip
+
+
+//OSPF
+router ospf 1
+network 10.12.0.0 0.0.0.3 area 0
+network 172.16.0.0 0.0.0.3 area 0
+network 172.16.1.0 0.0.0.3 area 0
+
+//NAT
+int g0/2
+ip nat outside
+
+int g0/0
+ip nat inside
+
+ip nat inside source static 10.10.0.4 150.10.1.1
+ip nat inside source static 10.10.0.5 150.10.1.2
+ip nat inside source static 10.10.10.1 150.10.1.3
+
+ip route 150.10.1.1 255.255.255.255 null 0
+ip route 150.10.1.2 255.255.255.255 null 0
+ip route 150.10.1.3 255.255.255.255 null 0
+
+///Falta agregar al bgp
+
+
+ip access-list standard LISTA_ALIBABAHQ
+permit 172.20.1.0 0.0.0.255
+permit 172.20.2.0 0.0.0.255
+permit 172.20.3.0 0.0.0.255
+permit 172.16.0.0 0.0.0.3
+
+ip nat inside source list LISTA_ALIBABAHQ int g0/2 overload
+
+
+
 --S1_TESLA
 
 en
@@ -312,3 +367,5 @@ switchport access vlan 3
 int g1/0/24
 switchport trunk encapsulation dot1q
 switchport mode trunk
+
+
