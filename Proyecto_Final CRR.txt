@@ -291,13 +291,13 @@ no shut
 int tunnel 0
 ip add 172.16.0.1 255.255.255.252
 tunnel source g0/2
-tunnel destination 101.0.0.46
+tunnel destination 50.0.0.46
 tunnel mode gre ip
 
 int tunnel 1
 ip add 172.16.1.1 255.255.255.252
 tunnel source g0/2
-tunnel destination 101.0.0.42
+tunnel destination 50.0.0.42
 tunnel mode gre ip
 
 
@@ -532,4 +532,124 @@ ip route 150.10.1.5 255.255.255.255 null 0
 ip route 150.10.1.6 255.255.255.255 null 0
 
 ///Falta agregar al bgp
+
+
+ip access-list standard LISTA_MICROSOFTHQ
+permit 10.10.1.0 0.0.0.255
+permit 10.12.0.0 0.0.0.3
+
+ip nat inside source list LISTA_MICROSOFTHQ int g0/2 overload
+
+
+
+--STARLINK
+
+en
+conf t
+hostname STARLINK
+
+int g0/0/0
+ip add 50.0.0.14 255.255.255.252
+no shut
+
+int g0/2/0
+ip add 50.0.0.49 255.255.255.252
+no shut
+
+int g0/1
+ip add 50.0.0.53 255.255.255.252
+no shut
+
+int g0/2
+ip add 50.0.0.57 255.255.255.252
+no shut
+
+int g0/1/0
+ip add 50.0.0.61 255.255.255.252
+no shut
+
+
+--VERYZON
+
+en
+conf t
+hostname VERYZON
+
+int g0/0/0
+ip add 50.0.0.18 255.255.255.252
+no shut
+
+int g0/0
+ip add 50.0.0.77 255.255.255.252
+no shut
+
+int g0/2/0
+ip add 50.0.0.73 255.255.255.252
+no shut
+
+int g0/1/0
+ip add 50.0.0.69 255.255.255.252
+no shut
+
+int g0/2
+ip add 50.0.0.65 255.255.255.252
+no shut
+
+
+--SPECTRUM
+
+en
+conf t
+hostname SPECTRUM
+
+int g0/0
+ip add 50.0.0.22 255.255.255.252
+no shut
+
+int g0/2
+ip add 50.0.0.81 255.255.255.252
+no shut
+
+int g0/2/0
+ip add 50.0.0.85 255.255.255.252
+no shut
+
+int g0/0/0
+ip add 50.0.0.89 255.255.255.252
+no shut
+
+int g0/1/0
+ip add 50.0.0.93 255.255.255.252
+no shut
+
+
+
+
+
+--XFINITY
+
+en
+conf t
+hostname XFINITY
+
+int g0/1
+ip add 50.0.0.26 255.255.255.252
+no shut
+
+int g0/0
+ip add 50.0.0.105 255.255.255.252
+no shut
+
+int g0/2/0
+ip add 50.0.0.109 255.255.255.252
+no shut
+
+int g0/0/0
+ip add 50.0.0.97 255.255.255.252
+no shut
+
+int g0/1/0
+ip add 50.0.0.101 255.255.255.252
+no shut
+
 
