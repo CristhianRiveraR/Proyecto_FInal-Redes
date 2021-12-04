@@ -325,13 +325,13 @@ ip route 150.10.1.3 255.255.255.255 null 0
 ///Falta agregar al bgp
 
 
-ip access-list standard LISTA_ALIBABAHQ
-permit 172.20.1.0 0.0.0.255
-permit 172.20.2.0 0.0.0.255
-permit 172.20.3.0 0.0.0.255
-permit 172.16.0.0 0.0.0.3
+ip access-list standard LISTA_TESLAHQ
+permit 10.10.1.0 0.0.0.255
+permit 10.10.2.0 0.0.0.255
+permit 10.10.3.0 0.0.0.255
+permit 10.12.0.0 0.0.0.3
 
-ip nat inside source list LISTA_ALIBABAHQ int g0/2 overload
+ip nat inside source list LISTA_TESLAHQ int g0/2 overload
 
 
 
