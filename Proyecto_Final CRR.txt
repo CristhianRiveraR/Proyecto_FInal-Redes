@@ -1272,7 +1272,8 @@ int g0/1
 no shut
 
 //BGP
-
+router bgp 55129
+neighbor 50.0.0.45 remote-as 55109
 
 //Tunel
 
