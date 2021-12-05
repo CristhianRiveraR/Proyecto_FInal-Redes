@@ -1225,6 +1225,19 @@ ip add 50.0.0.45 255.255.255.252
 no shut
 
 
+//BGP
+router bgp 55109
+neighbor 50.0.0.34 remote-as 55132
+neighbor 50.0.0.38 remote-as 55131
+neighbor 50.0.0.42 remote-as 55130
+neighbor 50.0.0.46 remote-as 55129
+neighbor 50.0.0.29 remote-as 55102
+network 50.0.0.28 mask 255.255.255.252
+network 50.0.0.32 mask 255.255.255.252
+network 50.0.0.36 mask 255.255.255.252
+network 50.0.0.40 mask 255.255.255.252
+network 50.0.0.44 mask 255.255.255.252
+
 --TESLA_BR1
 
 en
