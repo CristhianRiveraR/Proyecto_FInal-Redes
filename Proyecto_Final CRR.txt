@@ -1852,6 +1852,79 @@ int g0/0/0
 ip add 50.0.0.50 255.255.255.252
 no shut
 
+
+
+int g0/1.1
+encapsulation dot1q 1
+ip add 10.10.0.1 255.255.255.0
+
+int g0/1.2
+encapsulation dot1q 2
+ip add 10.10.1.1 255.255.255.0
+ip helper-address 10.10.0.2
+
+
+int g0/1
+no shut
+
+
+//BGP
+router bgp 55110
+neighbor 50.0.0.49 remote-as 55105
+
+
+
+//NAT
+
+int g0/0/0
+ip nat outside
+
+int g0/1.1
+ip nat inside
+
+int g0/1.2
+ip nat inside
+
+
+ip nat inside source static 10.10.0.4 150.10.1.15
+ip nat inside source static 10.10.0.5 150.10.1.16
+
+ip route 150.10.1.15 255.255.255.255 null 0
+ip route 150.10.1.16 255.255.255.255 null 0
+
+router bgp 55110
+network 150.10.1.15 mask 255.255.255.255
+network 150.10.1.16 mask 255.255.255.255
+
+ip access-list standard LISTA_NADAHQ
+permit 10.10.1.0 0.0.0.255
+
+ip nat inside source list LISTA_NADAHQ int g0/0/0 overload
+
+
+-----S1_NASA
+
+en
+conf t
+hostname S1_NASA
+
+vlan 1
+exit
+vlan 2
+exit
+
+int range f0/1 - 3
+switchport mode access
+switchport access vlan 2
+
+int range f0/16 -19
+switchport mode access
+switchport access vlan 1
+
+int g0/1
+switchport mode trunk
+
+
 --GOOGLE_HQ
 
 en
