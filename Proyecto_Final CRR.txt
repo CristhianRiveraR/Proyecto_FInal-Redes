@@ -1352,7 +1352,6 @@ type 7960
 button 1:3
 
 
-
 //OSPF
 router ospf 1
 network 10.10.4.0 0.0.0.255 area 0
@@ -1423,7 +1422,10 @@ no shut
 
 //BGP
 
+router bgp 55130
+neighbor 50.0.0.41 remote-as 55109
 
+   
 //Tunel
 
 int tunnel 1
