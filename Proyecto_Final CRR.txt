@@ -1105,6 +1105,98 @@ ip add 50.0.0.50 255.255.255.252
 no shut
 
 
+int g0/2.1
+encapsulation dot1q 1
+ip add 10.10.0.1 255.255.255.0
+
+int g0/2.2
+encapsulation dot1q 2
+ip add 10.10.1.1 255.255.255.0
+ip helper-address 10.10.0.2
+
+int g0/2
+no shut
+
+//BGP
+
+router bgp 55108
+neighbor 50.0.0.98 remote-as 55127
+neighbor 50.0.0.102 remote-as 55128
+neighbor 50.0.0.106 remote-as 55126
+neighbor 50.0.0.110 remote-as 55125
+neighbor 50.0.0.25 remote-as 55102
+network 50.0.0.24 mask 255.255.255.252
+network 50.0.0.96 mask 255.255.255.252
+network 50.0.0.100 mask 255.255.255.252
+network 50.0.0.104 mask 255.255.255.252
+network 50.0.0.108 mask 255.255.255.252
+
+
+//NAT
+int g0/2.1
+ip nat inside
+
+int g0/2.2
+ip nat inside
+
+int g0/0/0
+ip nat outside
+
+int g0/0
+ip nat outside
+
+int g0/2/0
+ip nat outside
+
+int g0/1/0
+ip nat outside
+
+int g0/1
+ip nat outside
+
+
+ip nat inside source static 10.10.0.4 150.10.1.13
+ip nat inside source static 10.10.0.5 150.10.1.14
+
+ip route 150.10.1.13 255.255.255.255 null 0
+ip route 150.10.1.14 255.255.255.255 null 0
+
+router bgp 55108
+network 150.10.1.13 mask 255.255.255.255
+network 150.10.1.14 mask 255.255.255.255
+
+ip access-list standard LISTA_XFINITYHQ
+permit 10.10.1.0 0.0.0.255
+
+ip nat inside source list LISTA_XFINITYHQ int g0/0 overload
+ip nat inside source list LISTA_XFINITYHQ int g0/1 overload
+ip nat inside source list LISTA_XFINITYHQ int g0/0/0 overload
+ip nat inside source list LISTA_XFINITYHQ int g0/2/0 overload
+ip nat inside source list LISTA_XFINITYHQ int g0/1/0 overload
+
+
+---S1_XFINITY
+
+en
+conf t
+hostname S1_XFINITY
+
+vlan 1
+exit
+vlan 2
+exit
+
+int range f0/1 - 3
+switchport mode access
+switchport access vlan 2
+
+int range f0/16 - 19
+switchport mode access
+switchport access vlan 1
+
+int g0/1
+switchport mode trunk
+
 
 --MID
 
