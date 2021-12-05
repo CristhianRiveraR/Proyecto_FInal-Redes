@@ -761,7 +761,7 @@ neighbor 50.0.0.54 remote-as 55111
 neighbor 50.0.0.58 remote-as 55112
 neighbor 50.0.0.62 remote-as 55113
 network 50.0.0.12 mask 255.255.255.252
-network 50.0.0.4 mask 255.255.255.252
+network 50.0.0.48 mask 255.255.255.252
 network 50.0.0.52 mask 255.255.255.252
 network 50.0.0.56 mask 255.255.255.252
 network 50.0.0.60 mask 255.255.255.252
@@ -858,6 +858,78 @@ no shut
 int g0/2
 ip add 50.0.0.65 255.255.255.252
 no shut
+
+
+
+int g0/1.1
+encapsulation dot1q 1
+ip add 10.10.0.1 255.255.255.0
+
+int g0/1.2
+encapsulation dot1q 2
+ip add 10.10.1.1 255.255.255.0
+ip helper-address 10.10.0.2
+
+int g0/1
+no shut
+
+
+//BGP
+router bgp 55106
+neighbor 50.0.0.66 remote-as 55114
+neighbor 50.0.0.70 remote-as 55115
+neighbor 50.0.0.74 remote-as 55118
+neighbor 50.0.0.78 remote-as 55117
+neighbor 50.0.0.17 remote-as 55101
+network 50.0.0.16 mask 255.255.255.252
+network 50.0.0.64 mask 255.255.255.252
+network 50.0.0.68 mask 255.255.255.252
+network 50.0.0.72 mask 255.255.255.252
+network 50.0.0.76 mask 255.255.255.252
+
+
+//NAT
+int g0/1.1
+ip nat inside
+
+int g0/1.2
+ip nat inside
+
+int g0/0/0
+ip nat outside
+
+int g0/0
+ip nat outside
+
+int g0/2/0
+ip nat outside
+
+int g0/1/0
+ip nat outside
+
+int g0/2
+ip nat outside
+
+
+
+ip nat inside source static 10.10.0.4 150.10.1.9
+ip nat inside source static 10.10.0.5 150.10.1.10
+
+ip route 150.10.1.9 255.255.255.255 null 0
+ip route 150.10.1.10 255.255.255.255 null 0
+
+router bgp 55106
+network 150.10.1.9 mask 255.255.255.255
+network 150.10.1.10 mask 255.255.255.255
+
+ip access-list standard LISTA_VERIZONHQ
+permit 10.10.1.0 0.0.0.255
+
+ip nat inside source list LISTA_VERIZONHQ int g0/2 overload
+ip nat inside source list LISTA_VERIZONHQ int g0/1 overload
+ip nat inside source list LISTA_VERIZONHQ int g0/0/0 overload
+ip nat inside source list LISTA_VERIZONHQ int g0/2/0 overload
+ip nat inside source list LISTA_VERIZONHQ int g0/1/0 overload
 
 
 --SPECTRUM
