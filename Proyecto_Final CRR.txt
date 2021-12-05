@@ -1574,6 +1574,8 @@ no shut
 
 
 //BGP
+router bgp 55131
+neighbor 50.0.0.37 remote-as 55109
 
 
 //Tunel
@@ -1724,6 +1726,8 @@ no shut
 
 //BGP
 
+router bgp 55132
+neighbor 50.0.0.33 remote-as 55109
 
 
 //Tunel
