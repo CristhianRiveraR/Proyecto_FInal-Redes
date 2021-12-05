@@ -1275,3 +1275,183 @@ permit 10.10.9.0 0.0.0.255
 permit 10.10.30.0 0.0.0.255
 
 ip nat inside source list LISTA_MICROSOFTBR2HQ int g0/0/0 overload
+
+
+
+--NASA_HQ
+
+en
+conf t
+hostname NASA_HQ
+
+int g0/0/0
+ip add 50.0.0.50 255.255.255.252
+no shut
+
+--GOOGLE_HQ
+
+en
+conf t
+hostname GOOGLE_HQ
+
+int g0/2
+ip add 50.0.0.54 255.255.255.252
+no shut
+
+
+
+
+--MEGAPATH
+
+en
+conf t
+hostname MEGAPATH
+
+int g0/1
+ip add 50.0.0.58 255.255.255.252
+no shut
+
+
+----FRONTIER
+
+en
+conf t
+hostname FRONTIER
+
+int g0/0/0
+ip add 50.0.0.62 255.255.255.252
+no shut
+
+
+---ISERV
+
+en
+conf t
+hostname ISERV
+
+int g0/1
+ip add 50.0.0.66 255.255.255.252
+no shut
+
+
+---COX
+
+en
+conf t
+hostname COX
+
+int g0/0/0
+ip add 50.0.0.70 255.255.255.252
+no shut
+
+
+
+---AMAZON_HQ
+
+en
+conf t
+hostname AMAZON_HQ
+
+int g0/0/0
+ip add 50.0.0.74 255.255.255.252
+no shut
+
+
+---FACEBOOK_HQ
+
+en
+conf t
+hostname FACEBOOK_HQ
+
+int g0/2
+ip add 50.0.0.78 255.255.255.252
+no shut
+
+
+---NETFLIX_HQ
+
+
+en
+conf t
+hostname NETFLIX_HQ
+
+int g0/2
+ip add 50.0.0.82 255.255.255.252
+no shut
+
+
+--DISNEY_HQ
+
+en
+conf t
+hostname DISNEY_HQ
+
+int g0/0/0
+ip add 50.0.0.86 255.255.255.252
+no shut
+
+
+
+---CENTURY
+
+en
+conf t
+hostname CENTURY
+
+int g0/0/0
+ip add 50.0.0.90 255.255.255.252
+no shut
+
+---OPTIMUM
+
+en
+conf t
+hostname OPTIMUM
+
+int g0/0/0
+ip add 50.0.0.94 255.255.255.252
+no shut
+
+
+--MEDIACOM
+
+en
+conf t
+hostname MEDIACOM
+
+int g0/0/0
+ip add 50.0.0.98 255.255.255.252
+no shut
+
+
+--TOAST
+
+en
+conf t
+hostname TOAST
+
+int g0/0/0
+ip add 50.0.0.102 255.255.255.252
+no shut
+
+
+
+--HP_HQ
+
+en
+conf t
+hostname HP_HQ
+
+int g0/2
+ip add 50.0.0.106 255.255.255.252
+no shut
+
+--APPLE_HQ
+
+en
+conf t
+hostname APPLE_HQ
+
+int g0/0/0
+ip add 50.0.0.110 255.255.255.252
+no shut
