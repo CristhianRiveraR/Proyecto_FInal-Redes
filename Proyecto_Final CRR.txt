@@ -977,3 +977,301 @@ permit 10.10.30.0 0.0.0.255
 
 ip nat inside source list LISTA_TESLABR2HQ int g0/2 overload
 
+
+
+--MICROSOFT_BR1
+
+en
+conf t
+hostname MICROSOFT_BR1
+
+int g0/2
+ip add 50.0.0.38 255.255.255.252
+no shut
+
+int g0/0.1
+encapsulation dot1q 1
+ip add 10.10.4.1 255.255.255.0
+ip helper-address 10.10.0.2
+
+int g0/0.2
+encapsulation dot1q 2
+ip add 10.10.5.1 255.255.255.0
+ip helper-address 10.10.0.2
+
+int g0/0.3
+encapsulation dot1q 3
+ip add 10.10.6.1 255.255.255.0
+ip helper-address 10.10.0.2
+
+int g0/0.20
+encapsulation dot1q 20
+ip add 10.10.20.1 255.255.255.0
+ip helper-address 10.10.0.2
+
+int g0/0
+no shut
+
+
+//BGP
+
+
+//Tunel
+int tunnel 0
+ip add 172.16.0.2 255.255.255.252
+tunnel source g0/2
+tunnel destination 50.0.0.10
+tunnel mode gre ip
+
+
+--S1_MICROSOFT_BR1
+en
+conf t
+hostname S1_MICROSOFT_BR1
+
+
+vlan 1
+exit
+vlan 2
+exit
+vlan 3
+exit
+vlan 20
+exit
+
+int range g1/0/1 - 3
+switchport mode access
+switchport voice vlan 20
+
+int g1/0/1
+switchport access vlan 1
+
+int g1/0/2
+switchport access vlan 2
+
+int g1/0/3
+switchport access vlan 3
+
+int g1/0/24
+switchport trunk encapsulation dot1q
+switchport mode trunk
+
+
+//Telefonia
+
+license boot module c2900 technology-package uck9
+do wr
+do reload
+
+telephony-service
+auto-reg-ephone
+max-dn 10
+max-ephone 10
+ip source-address 10.10.20.1 port 2000
+
+ephone-dn 1
+number 75001
+exit
+
+ephone-dn 2
+number 75002
+exit
+
+ephone-dn 3
+number 75003
+exit
+
+ephone 1
+type 7960
+button 1:1
+ephone 2
+type 7960
+button 1:2
+ephone 3
+type 7960
+button 1:3
+
+
+
+//OSPF
+router ospf 2
+network 10.10.4.0 0.0.0.255 area 0
+network 10.10.5.0 0.0.0.255 area 0
+network 10.10.6.0 0.0.0.255 area 0
+network 10.10.20.0 0.0.0.255 area 0
+network 172.16.0.0 0.0.0.3 area 0
+passive-interface g0/0
+
+
+
+//NAT
+int g0/2
+ip nat outside
+
+int g0/0.1
+ip nat inside
+
+int g0/0.2
+ip nat inside
+
+int g0/0.3
+ip nat inside
+
+
+
+ip access-list standard LISTA_MICROSOFTBR1HQ
+permit 10.10.4.0 0.0.0.255
+permit 10.10.5.0 0.0.0.255
+permit 10.10.6.0 0.0.0.255
+permit 10.10.20.0 0.0.0.255
+
+ip nat inside source list LISTA_MICROSOFTBR1HQ int g0/2 overload
+
+
+
+--MICROSOFT_BR2
+
+en
+conf t
+hostname MICROSOFT_BR2
+
+int g0/0/0
+ip add 50.0.0.34 255.255.255.252
+no shut
+
+int g0/1.1
+encapsulation dot1q 1
+ip add 10.10.7.1 255.255.255.0
+ip helper-address 10.10.0.2
+
+int g0/1.2
+encapsulation dot1q 2
+ip add 10.10.8.1 255.255.255.0
+ip helper-address 10.10.0.2
+
+int g0/1.3
+encapsulation dot1q 3
+ip add 10.10.9.1 255.255.255.0
+ip helper-address 10.10.0.2
+
+int g0/1.30
+encapsulation dot1q 30
+ip add 10.10.30.1 255.255.255.0
+ip helper-address 10.10.0.2
+
+int g0/1
+no shut
+
+//BGP
+
+
+
+//Tunel
+int tunnel 1
+ip add 172.16.1.2 255.255.255.252
+tunnel source g0/0/0
+tunnel destination 50.0.0.10
+tunnel mode gre ip
+
+
+
+--S1_MICROSOFT_BR2
+en
+conf t
+hostname S1_MICROSOFT_BR2
+
+
+vlan 1
+exit
+vlan 2
+exit
+vlan 3
+exit
+vlan 30
+exit
+
+int range g1/0/1 - 3
+switchport mode access
+switchport voice vlan 30
+
+int g1/0/1
+switchport access vlan 1
+
+int g1/0/2
+switchport access vlan 2
+
+int g1/0/3
+switchport access vlan 3
+
+int g1/0/24
+switchport trunk encapsulation dot1q
+switchport mode trunk
+
+
+
+//Telefonia
+license boot module c2900 technology-package uck9
+do wr
+do reload
+
+telephony-service
+auto-reg-ephone
+max-dn 10
+max-ephone 10
+ip source-address 10.10.30.1 port 2000
+
+ephone-dn 1
+number 23001
+exit
+
+ephone-dn 2
+number 23002
+exit
+
+ephone-dn 3
+number 23003
+exit
+
+ephone 1
+type 7960
+button 1:1
+ephone 2
+type 7960
+button 1:2
+ephone 3
+type 7960
+button 1:3
+
+
+//OSPF
+router ospf 2
+network 10.10.7.0 0.0.0.255 area 0
+network 10.10.8.0 0.0.0.255 area 0
+network 10.10.9.0 0.0.0.255 area 0
+network 10.10.30.0 0.0.0.255 area 0
+network 172.16.1.0 0.0.0.3 area 0
+passive-interface g0/1
+
+
+
+//NAT
+int g0/0/0
+ip nat outside
+
+int g0/1.1
+ip nat inside
+
+int g0/1.2
+ip nat inside
+
+int g0/1.3
+ip nat inside
+
+
+ip access-list standard LISTA_MICROSOFTBR2HQ
+permit 10.10.7.0 0.0.0.255
+permit 10.10.8.0 0.0.0.255
+permit 10.10.9.0 0.0.0.255
+permit 10.10.30.0 0.0.0.255
+
+ip nat inside source list LISTA_MICROSOFTBR2HQ int g0/0/0 overload
