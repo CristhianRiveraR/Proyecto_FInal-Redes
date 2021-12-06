@@ -2070,6 +2070,51 @@ ip add 50.0.0.62 255.255.255.252
 no shut
 
 
+int g0/0.1
+encapsulation dot1q 1
+ip add 10.10.0.1 255.255.255.0
+
+int g0/0.2
+encapsulation dot1q 2
+ip add 10.10.1.1 255.255.255.0
+ip helper-address 10.10.0.2
+
+int g0/0
+no shut
+
+
+//BGP
+router bgp 55113
+neighbor 50.0.0.61 remote-as 55105
+
+
+//NAT
+int g0/0/0
+ip nat outside
+
+int g0/0.1
+ip nat inside
+
+int g0/0.2
+ip nat inside
+
+
+ip nat inside source static 10.10.0.4 150.10.1.21
+ip nat inside source static 10.10.0.5 150.10.1.22
+
+ip route 150.10.1.21 255.255.255.255 null 0
+ip route 150.10.1.22 255.255.255.255 null 0
+
+router bgp 55113
+network 150.10.1.21 mask 255.255.255.255
+network 150.10.1.22 mask 255.255.255.255
+
+ip access-list standard LISTA_FRONTIERHQ
+permit 10.10.1.0 0.0.0.255
+
+ip nat inside source list LISTA_FRONTIERHQ int g0/0/0 overload
+
+
 ---ISERV
 
 en
