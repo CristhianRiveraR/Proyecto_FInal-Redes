@@ -2025,6 +2025,40 @@ ip helper-address 10.10.0.2
 int g0/0
 no shut
 
+
+//BGP
+router bgp 55112
+neighbor 50.0.0.57 remote-as 55105
+
+
+
+//NAT
+int g0/1
+ip nat outside
+
+int g0/0.1
+ip nat inside
+
+int g0/0.2
+ip nat inside
+
+
+ip nat inside source static 10.10.0.4 150.10.1.19
+ip nat inside source static 10.10.0.5 150.10.1.20
+
+ip route 150.10.1.19 255.255.255.255 null 0
+ip route 150.10.1.20 255.255.255.255 null 0
+
+router bgp 55112
+network 150.10.1.19 mask 255.255.255.255
+network 150.10.1.20 mask 255.255.255.255
+
+ip access-list standard LISTA_MEGAPATHHQ
+permit 10.10.1.0 0.0.0.255
+
+ip nat inside source list LISTA_MEGAPATHHQ int g0/1 overload
+
+
 ----FRONTIER
 
 en
